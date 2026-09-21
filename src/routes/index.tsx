@@ -26,10 +26,15 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import productHero from "@/assets/product-hero.png";
-import bonusMapa from "@/assets/bonus-mapa.png";
-import bonusPaineis from "@/assets/bonus-paineis.png";
-import bonusChecklist from "@/assets/bonus-checklist.png";
-import bonusEntrevista from "@/assets/bonus-entrevista.png";
+import bonusMapaAsset from "@/assets/bonus-mapa.png.asset.json";
+import bonusPaineisAsset from "@/assets/bonus-paineis.png.asset.json";
+import bonusChecklistAsset from "@/assets/bonus-checklist.png.asset.json";
+import bonusEntrevistaAsset from "@/assets/bonus-entrevista.png.asset.json";
+
+const bonusMapa = bonusMapaAsset.url;
+const bonusPaineis = bonusPaineisAsset.url;
+const bonusChecklist = bonusChecklistAsset.url;
+const bonusEntrevista = bonusEntrevistaAsset.url;
 import casoDesatencao from "@/assets/casos/caso-desatencao.png.asset.json";
 import casoHumor from "@/assets/casos/caso-humor.png.asset.json";
 import casoAnsiedade from "@/assets/casos/caso-ansiedade.png.asset.json";
