@@ -9,6 +9,7 @@ import {
   CircleCheck,
   Clock3,
   Download,
+  Expand,
   Gift,
   Layers3,
   Lightbulb,
@@ -21,12 +22,20 @@ import {
   Sparkles,
   Star,
   Target,
+  X,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import productHero from "@/assets/product-hero.png";
 import bonusMapa from "@/assets/bonus-mapa.png";
 import bonusPaineis from "@/assets/bonus-paineis.png";
 import bonusChecklist from "@/assets/bonus-checklist.png";
 import bonusEntrevista from "@/assets/bonus-entrevista.png";
+import casoDesatencao from "@/assets/casos/caso-desatencao.png.asset.json";
+import casoHumor from "@/assets/casos/caso-humor.png.asset.json";
+import casoAnsiedade from "@/assets/casos/caso-ansiedade.png.asset.json";
+import casoSono from "@/assets/casos/caso-sono.png.asset.json";
+import casoPerfeccionismo from "@/assets/casos/caso-perfeccionismo.png.asset.json";
+import casoHiperatividade from "@/assets/casos/caso-hiperatividade.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,10 +72,12 @@ const benefits = [
 ];
 
 const sampleCards = [
-  { case: "CASO 05", title: "A queixa de desatenção", tag: "ATENÇÃO", note: "Uma queixa, diferentes caminhos de investigação." },
-  { case: "CASO 12", title: "Preocupação ou obsessão?", tag: "COGNIÇÃO", note: "O conteúdo importa, mas a função também." },
-  { case: "CASO 28", title: "Oscilações de humor", tag: "HUMOR", note: "Tempo, intensidade e contexto mudam a hipótese." },
-  { case: "CASO 37", title: "Impulsividade em contexto", tag: "COMPORTAMENTO", note: "O mesmo sinal pode ter origens distintas." },
+  { image: casoDesatencao.url, title: "Desatenção e queda no rendimento" },
+  { image: casoHumor.url, title: "Humor deprimido ou esgotamento?" },
+  { image: casoAnsiedade.url, title: "Ansiedade intensa e crises súbitas" },
+  { image: casoSono.url, title: "Sono desregulado e prejuízo funcional" },
+  { image: casoPerfeccionismo.url, title: "Perfeccionismo, autocobrança e paralisia" },
+  { image: casoHiperatividade.url, title: "Hiperatividade infantil e comportamento opositor" },
 ];
 
 const mainItems = [
@@ -115,8 +126,12 @@ function SectionTitle({ eyebrow, children }: { eyebrow?: string; children: React
 }
 
 function SampleRail() {
+  const [selectedCard, setSelectedCard] = useState<(typeof sampleCards)[number] | null>(null);
   const loop = [...sampleCards, ...sampleCards];
-  return <div className="marquee" aria-label="Amostras dos casos"><div className="marquee-track">{loop.map((item, i) => <article className="sample-sheet" key={`${item.case}-${i}`} aria-hidden={i >= sampleCards.length}><div className="sample-top"><span>{item.case}</span><small>{item.tag}</small></div><div className="sample-map"><i /><i /><i /><b /><i /><i /></div><h3>{item.title}</h3><p>{item.note}</p><div className="sample-foot"><span>QUEIXA</span><ArrowRight size={13}/><span>HIPÓTESES</span><ArrowRight size={13}/><span>INVESTIGAR</span></div></article>)}</div></div>;
+  return <>
+    <div className="marquee case-marquee" aria-label="Amostras reais dos casos"><div className="marquee-track">{loop.map((item, i) => <button className="case-preview" type="button" key={`${item.title}-${i}`} aria-hidden={i >= sampleCards.length} tabIndex={i >= sampleCards.length ? -1 : 0} onClick={() => setSelectedCard(item)}><img src={item.image} alt={i < sampleCards.length ? item.title : ""} width={1491} height={1055} loading="lazy" /><span><Expand size={16} aria-hidden="true" /> Toque para ampliar</span></button>)}</div></div>
+    {selectedCard && <div className="case-lightbox" role="dialog" aria-modal="true" aria-label={selectedCard.title} onClick={() => setSelectedCard(null)}><Button className="case-lightbox-close" size="icon" variant="secondary" aria-label="Fechar imagem" onClick={() => setSelectedCard(null)}><X /></Button><img src={selectedCard.image} alt={selectedCard.title} width={1491} height={1055} onClick={(event) => event.stopPropagation()} /></div>}
+  </>;
 }
 
 function RecentPurchaseNotice() {
