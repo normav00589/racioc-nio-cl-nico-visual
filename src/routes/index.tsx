@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   BookOpenCheck,
@@ -15,6 +16,7 @@ import {
   MonitorSmartphone,
   Network,
   SearchCheck,
+  ShoppingBag,
   ShieldCheck,
   Sparkles,
   Star,
@@ -96,6 +98,14 @@ const faqs = [
   ["E se eu comprar e não gostar?", "Você tem 30 dias para solicitar o reembolso, sem burocracia, conforme os termos da plataforma de pagamento."],
 ];
 
+const recentActivity = [
+  { name: "Mariana", city: "Campinas, SP", plan: "Plano Completo" },
+  { name: "Lucas", city: "Recife, PE", plan: "Plano Básico" },
+  { name: "Ana", city: "Belo Horizonte, MG", plan: "Plano Completo" },
+  { name: "Camila", city: "Curitiba, PR", plan: "Plano Completo" },
+  { name: "Rafael", city: "Salvador, BA", plan: "Plano Básico" },
+];
+
 function BuyButton({ label = "QUERO ACESSAR OS 40 CASOS" }: { label?: string }) {
   return <a href="#planos" className="cta">{label}<ArrowRight size={18} aria-hidden="true" /></a>;
 }
@@ -107,6 +117,40 @@ function SectionTitle({ eyebrow, children }: { eyebrow?: string; children: React
 function SampleRail() {
   const loop = [...sampleCards, ...sampleCards];
   return <div className="marquee" aria-label="Amostras dos casos"><div className="marquee-track">{loop.map((item, i) => <article className="sample-sheet" key={`${item.case}-${i}`} aria-hidden={i >= sampleCards.length}><div className="sample-top"><span>{item.case}</span><small>{item.tag}</small></div><div className="sample-map"><i /><i /><i /><b /><i /><i /></div><h3>{item.title}</h3><p>{item.note}</p><div className="sample-foot"><span>QUEIXA</span><ArrowRight size={13}/><span>HIPÓTESES</span><ArrowRight size={13}/><span>INVESTIGAR</span></div></article>)}</div></div>;
+}
+
+function RecentPurchaseNotice() {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const showTimer = window.setTimeout(() => setVisible(true), 2500);
+    const cycleTimer = window.setInterval(() => {
+      setVisible(false);
+      window.setTimeout(() => {
+        setIndex((current) => (current + 1) % recentActivity.length);
+        setVisible(true);
+      }, 450);
+    }, 6500);
+
+    return () => {
+      window.clearTimeout(showTimer);
+      window.clearInterval(cycleTimer);
+    };
+  }, []);
+
+  const activity = recentActivity[index];
+
+  return (
+    <aside className={`purchase-notice ${visible ? "is-visible" : ""}`} aria-live="polite" aria-atomic="true">
+      <div className="purchase-icon"><ShoppingBag size={18} aria-hidden="true" /></div>
+      <div className="purchase-copy">
+        <p><strong>{activity.name}</strong>, de {activity.city}</p>
+        <span>escolheu o <b>{activity.plan}</b></span>
+        <small>Atividade ilustrativa</small>
+      </div>
+    </aside>
+  );
 }
 
 function SalesPage() {
@@ -155,5 +199,6 @@ function SalesPage() {
     <section className="faq section-light"><div className="shell"><SectionTitle eyebrow="PERGUNTAS FREQUENTES">Ainda ficou com alguma dúvida?</SectionTitle><div className="faq-list">{faqs.map(([q,a],i)=><details key={q} open={i===0}><summary>{q}<ChevronDown size={20}/></summary><p>{a}</p></details>)}</div></div></section>
 
     <footer><div className="shell"><BrainCircuit/><p>© 2026 — 40 Casos Visuais de Psicodiagnóstico. Todos os direitos reservados.</p><small>Este site não é afiliado ao Facebook, Instagram, Google ou a qualquer uma de suas empresas. O material é protegido por direitos autorais. É proibida a reprodução, distribuição ou comercialização não autorizada, total ou parcial.</small></div></footer>
+    <RecentPurchaseNotice />
   </main>;
 }
