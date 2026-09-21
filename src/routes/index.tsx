@@ -155,6 +155,7 @@ function RecentPurchaseNotice() {
   }, []);
 
   const activity = recentActivity[index];
+  if (!activity) return null;
 
   return (
     <aside className={`purchase-notice ${visible ? "is-visible" : ""}`} aria-live="polite" aria-atomic="true">
