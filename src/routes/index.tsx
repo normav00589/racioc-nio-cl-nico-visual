@@ -36,6 +36,12 @@ import casoAnsiedade from "@/assets/casos/caso-ansiedade.png.asset.json";
 import casoSono from "@/assets/casos/caso-sono.png.asset.json";
 import casoPerfeccionismo from "@/assets/casos/caso-perfeccionismo.png.asset.json";
 import casoHiperatividade from "@/assets/casos/caso-hiperatividade.png.asset.json";
+import casoAgorafobia from "@/assets/casos/caso-agorafobia.png.asset.json";
+import casoRigidezSensorial from "@/assets/casos/caso-rigidez-sensorial.png.asset.json";
+import casoApostas from "@/assets/casos/caso-apostas.png.asset.json";
+import casoCiume from "@/assets/casos/caso-ciume.png.asset.json";
+import casoProcrastinacao from "@/assets/casos/caso-procrastinacao.png.asset.json";
+import casoTrauma from "@/assets/casos/caso-trauma.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -78,6 +84,15 @@ const sampleCards = [
   { image: casoSono.url, title: "Sono desregulado e prejuízo funcional" },
   { image: casoPerfeccionismo.url, title: "Perfeccionismo, autocobrança e paralisia" },
   { image: casoHiperatividade.url, title: "Hiperatividade infantil e comportamento opositor" },
+];
+
+const secondSampleCards = [
+  { image: casoAgorafobia.url, title: "Agorafobia, evitação e mundo que encolhe" },
+  { image: casoRigidezSensorial.url, title: "Rigidez, sensorialidade e necessidade de previsibilidade" },
+  { image: casoApostas.url, title: "Apostas, impulso e perda de controle" },
+  { image: casoCiume.url, title: "Ciúme, controle e dependência afetiva" },
+  { image: casoProcrastinacao.url, title: "Procrastinação, desorganização e função executiva" },
+  { image: casoTrauma.url, title: "Trauma, hipervigilância e esquiva" },
 ];
 
 const mainItems = [
@@ -127,9 +142,12 @@ function SectionTitle({ eyebrow, children }: { eyebrow?: string; children: React
 
 function SampleRail() {
   const [selectedCard, setSelectedCard] = useState<(typeof sampleCards)[number] | null>(null);
-  const loop = [...sampleCards, ...sampleCards];
+  const rows = [sampleCards, secondSampleCards];
   return <>
-    <div className="marquee case-marquee" aria-label="Amostras reais dos casos"><div className="marquee-track">{loop.map((item, i) => <button className="case-preview" type="button" key={`${item.title}-${i}`} aria-hidden={i >= sampleCards.length} tabIndex={i >= sampleCards.length ? -1 : 0} onClick={() => setSelectedCard(item)}><img src={item.image} alt={i < sampleCards.length ? item.title : ""} width={1491} height={1055} loading="lazy" /><span><Expand size={16} aria-hidden="true" /> Toque para ampliar</span></button>)}</div></div>
+    <div className="case-rails">{rows.map((cards, rowIndex) => {
+      const loop = [...cards, ...cards];
+      return <div className={`marquee case-marquee ${rowIndex === 1 ? "reverse" : ""}`} aria-label={rowIndex === 0 ? "Primeira faixa de casos" : "Segunda faixa de casos"} key={rowIndex}><div className="marquee-track">{loop.map((item, i) => <button className="case-preview" type="button" key={`${item.title}-${i}`} aria-hidden={i >= cards.length} tabIndex={i >= cards.length ? -1 : 0} onClick={() => setSelectedCard(item)}><img src={item.image} alt={i < cards.length ? item.title : ""} width={1491} height={1055} loading="lazy" /><span><Expand size={16} aria-hidden="true" /> Toque para ampliar</span></button>)}</div></div>;
+    })}</div>
     {selectedCard && <div className="case-lightbox" role="dialog" aria-modal="true" aria-label={selectedCard.title} onClick={() => setSelectedCard(null)}><Button className="case-lightbox-close" size="icon" variant="secondary" aria-label="Fechar imagem" onClick={() => setSelectedCard(null)}><X /></Button><img src={selectedCard.image} alt={selectedCard.title} width={1491} height={1055} onClick={(event) => event.stopPropagation()} /></div>}
   </>;
 }
